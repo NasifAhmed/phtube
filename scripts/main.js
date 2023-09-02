@@ -7,15 +7,11 @@ async function getCategory() {
     );
     const jsonData = await rawResponse.json();
     categories = jsonData.data;
-    //     console.log(jsonData.data[2].category);
-    //     console.log("wtf");
 
     const categoryBtnContainer = document.getElementById(
         "category-btn-container"
     );
     categories.forEach((categoryObject) => {
-        // console.log(categoryObject.category_id);
-        // console.log(categoryObject.category);
         let categoryBtn = document.createElement("div");
         categoryBtn.innerHTML = `
         <button class="rounded bg-red-600 text-white px-4 py-2 font-medium text-lg" onclick="getVideo(${categoryObject.category_id})">${categoryObject.category}</button>`;
@@ -31,8 +27,6 @@ async function getVideo(categoryId = 1000, sortCheck = false) {
     const jsonData = await rawResponse.json();
     console.log(jsonData.data);
     videos = jsonData.data;
-    // console.log("SORTEST");
-    // console.log(sortByViews(videos.slice()));
     if (sortCheck) {
         // using videos.slice() to empty slice the array and pass that
         // otherwise the array reference gets passed not values.
@@ -57,29 +51,40 @@ async function getVideo(categoryId = 1000, sortCheck = false) {
         `;
         videoCardContainer.appendChild(noVideo);
     } else {
-        videoCardContainer.classList = "grid grid-cols-4 gap-10";
+        videoCardContainer.classList =
+            "grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-10";
         // Looping in each array element and showing it on html
         videos.forEach((videoObject) => {
-            // console.log(videoObject);
-            console.log(videoObject.others.views);
-            console.log(videoObject.authors[0].profile_name);
-            // console.log(categoryObject.category);
             let videoCard = document.createElement("div");
             videoCard.classList = "flex flex-col items-center";
             videoCard.innerHTML = `
         <div>
             <div class="relative">
-                <img src="${videoObject.thumbnail}" class="rounded-xl h-52 w-80 object-cover -z-10" />
-                <h2 class="w-fit absolute bottom-3 right-3 p-1 text-end text-xs font-normal text-white bg-black rounded z-20">${videoObject.others.posted_date}</h2>
+                <img src="${
+                    videoObject.thumbnail
+                }" class="rounded-xl h-52 w-80 object-cover -z-10" />
+                <h2 id="video-date" class="w-fit absolute bottom-3 right-3 p-1 text-end text-xs font-normal text-white bg-black rounded z-20 ${
+                    videoObject.others.posted_date === "" ? "hidden" : "visible"
+                }">${formatSeconds(videoObject.others.posted_date)}</h2>
             </div>
             <div class="video-card-content flex justify-start items-start gap-4 mt-5">
                 <div>
-                    <img class="rounded-full h-10 w-10 object-cover" src="${videoObject.authors[0].profile_picture}">
+                    <img class="rounded-full h-10 w-10 object-cover" src="${
+                        videoObject.authors[0].profile_picture
+                    }">
                 </div>
                 <div class="items-start justify-start">
                     <h2 class="text-base font-bold">${videoObject.title}</h2>
-                    <h3 class="text-sm font-normal">${videoObject.authors[0].profile_name}</h3>
-                    <h3 class="text-sm font-normal">${videoObject.others.views} views</h3>
+                    <h3 class="text-sm font-normal">${
+                        videoObject.authors[0].profile_name
+                    }    ${
+                videoObject.authors[0].verified === true
+                    ? '<i class="fa-solid fa-circle-check text-blue-600"></i>'
+                    : ""
+            }</h3>
+                    <h3 class="text-sm font-normal">${
+                        videoObject.others.views
+                    } views</h3>
                 </div>
             </div>
         </div>`;
@@ -90,33 +95,37 @@ async function getVideo(categoryId = 1000, sortCheck = false) {
 
 function sortByViews(arr) {
     let len = arr.length;
-
     for (let i = 0; i < len - 1; i++) {
-        let minIndex = i;
-
-        // console.log(`PARSE TEST TITLE : ${arr[i].title}`);
-        // console.log(`PARSE TEST1 : ${arr[i].others.views.slice(0, -1)}`);
-        // console.log(
-        //     `PARSE TEST2 : ${parseFloat(arr[i].others.views.slice(0, -1))}`
-        // );
-
+        let largest = i;
         for (let j = i + 1; j < len; j++) {
             if (
-                parseFloat(arr[j].others.views.slice(0, -1)) * 1000 <
-                parseFloat(arr[minIndex].others.views.slice(0, -1)) * 1000
+                parseFloat(arr[j].others.views.slice(0, -1)) * 1000 >
+                parseFloat(arr[largest].others.views.slice(0, -1)) * 1000
             ) {
-                minIndex = j;
+                largest = j;
             }
         }
-
-        // Swap arr[i] and arr[minIndex]
         let temp = arr[i];
-        arr[i] = arr[minIndex];
-        arr[minIndex] = temp;
+        arr[i] = arr[largest];
+        arr[largest] = temp;
     }
-
     return arr;
 }
 
+function formatSeconds(s) {
+    sec = parseInt(s);
+    const hour = Math.floor(sec / 3600);
+    const min = Math.floor((sec % 3600) / 60);
+    if (hour > 0 && min > 0) {
+        return `${hour}hrs ${min} min ago`;
+    } else if (hour > 0 && min <= 0) {
+        return `${hour}hrs ago`;
+    } else if (hour <= 0 && min > 0) {
+        return `${hour}hrs ago`;
+    } else {
+        return `${sec} seconds ago`;
+    }
+}
+
 getCategory();
-getVideo(1000);
+getVideo();
