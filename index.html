@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/f8a10744c8.js" crossorigin="anonymous"></script>
     <!-- Manual Style -->
     <style>
         .font-primary {
@@ -18,18 +19,20 @@
     </style>
 </head>
 
-<body class="mx-32">
+<body class="lg:mx-32 md:mx-16 mx-12 mb-20">
     <header class="my-14">
-        <nav class="flex justify-between">
+        <nav class=" flex md:flex-row flex-col items-center justify-between gap-5">
             <img src="assets/Logo.png" alt="PH Tube logo">
             <button id="sort-btn" class="rounded bg-gray-300 text-black px-4 py-2 font-medium text-lg">Sort by
                 view</button>
-            <button class="rounded bg-red-600 text-white px-4 py-2 font-medium text-lg">Blog</button>
+            <a href="blog.html">
+                <button class="rounded bg-red-600 text-white px-4 py-2 font-medium text-lg">Blog</button>
+            </a>
         </nav>
     </header>
     <hr>
     <main>
-        <section id="category-btn-container" class="flex justify-center gap-10 pt-10 pb-10"></section>
+        <section id="category-btn-container" class="flex flex-wrap justify-center gap-10 pt-10 pb-10"></section>
         <section id="video-card-container">
 
         </section>
