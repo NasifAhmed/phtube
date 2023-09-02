@@ -70,7 +70,7 @@ async function getVideo(categoryId = 1000, sortCheck = false) {
         <div>
             <div class="relative">
                 <img src="${videoObject.thumbnail}" class="rounded-xl h-52 w-80 object-cover -z-10" />
-                <h2 class="w-fit absolute bottom-3 right-3 p-1 text-end text-xs font-normal text-white bg-black rounded z-20">HELLOOOOOOO</h2>
+                <h2 class="w-fit absolute bottom-3 right-3 p-1 text-end text-xs font-normal text-white bg-black rounded z-20">${videoObject.others.posted_date}</h2>
             </div>
             <div class="video-card-content flex justify-start items-start gap-4 mt-5">
                 <div>
